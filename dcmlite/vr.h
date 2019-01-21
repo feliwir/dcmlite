@@ -50,7 +50,7 @@ public:
 
     // Convert a VR string to VR enum type.
     // Return false if the string is not a valid VR.
-    static bool FromString(const std::string& vr_str, Type* vr_type = NULL);
+    static bool FromString(const std::string& vr_str, Type* vr_type = nullptr);
 
     //static bool IsValidVR();
 

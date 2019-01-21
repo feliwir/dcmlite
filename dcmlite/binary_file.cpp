@@ -3,21 +3,20 @@
 namespace dcmlite {
 
 BinaryFile::BinaryFile()
-    : file_(NULL)
-    , mode_(Mode::READ)
+    : m_mode(Mode::READ)
 {
 }
 
-bool BinaryFile::Open(const char* filename, Mode mode)
+bool BinaryFile::Open(std::string_view filename, Mode mode)
 {
     Close();
 
-    mode_ = mode;
+    m_mode = mode;
 
     if (mode == Mode::READ) {
-        file_ = std::fopen(filename, "rb");
+        m_file.open(filename.data(), std::ios::binary | std::ios::in);
     } else {
-        file_ = std::fopen(filename, "wb");
+        m_file.open(filename.data(), std::ios::binary | std::ios::out);
     }
 
     return IsOk();
@@ -25,9 +24,7 @@ bool BinaryFile::Open(const char* filename, Mode mode)
 
 void BinaryFile::Close()
 {
-    if (file_ != NULL) {
-        std::fclose(file_);
-    }
+    m_file.close();
 }
 
 } // namespace dcmlite

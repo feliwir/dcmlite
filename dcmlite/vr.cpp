@@ -93,7 +93,7 @@ bool VR::FromString(const std::string& vr_str, VR::Type* vr_type)
         return false;
     }
 
-    if (vr_type != NULL) {
+    if (vr_type != nullptr) {
         *vr_type = (VR::Type)vr_enum;
     }
 

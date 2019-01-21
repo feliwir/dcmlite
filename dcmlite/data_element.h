@@ -57,25 +57,25 @@ public:
     void SetBuffer(Buffer buffer, std::size_t length);
 
     // TODO: Add applicable VR types as comments.
-    bool GetString(std::string* value) const;
+    bool GetString(std::string& value) const;
 
-    bool GetUint16(std::uint16_t* value) const;
+    bool GetUint16(std::uint16_t& value) const;
 
-    bool GetUint32(std::uint32_t* value) const;
+    bool GetUint32(std::uint32_t& value) const;
 
-    bool GetInt16(std::int16_t* value) const;
+    bool GetInt16(std::int16_t& value) const;
 
-    bool GetInt32(std::int32_t* value) const;
+    bool GetInt32(std::int32_t& value) const;
 
-    bool GetFloat32(float32_t* value) const;
+    bool GetFloat32(float32_t& value) const;
 
-    bool GetFloat64(float64_t* value) const;
+    bool GetFloat64(float64_t& value) const;
 
     // Print value to an output stream.
     void PrintValue(std::ostream& os) const;
 
     // Print value to a string.
-    void PrintValue(std::string* str) const;
+    void PrintValue(std::string& str) const;
 
     // Visitor design pattern.
     virtual void Accept(Visitor& visitor);
@@ -83,17 +83,17 @@ public:
 protected:
     // Get number value.
     template <typename T>
-    bool GetNumber(T* value) const
+    bool GetNumber(T& value) const
     {
         return GetNumber<T>(value, sizeof(T));
     }
 
     // Get number value.
     template <typename T>
-    bool GetNumber(T* value, std::size_t length) const
+    bool GetNumber(T& value, std::size_t length) const
     {
         if (buffer_ && length_ == length) {
-            *value = *reinterpret_cast<T*>(buffer_.get());
+            value = *reinterpret_cast<T*>(buffer_.get());
             return true;
         }
         return false;

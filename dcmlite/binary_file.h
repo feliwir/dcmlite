@@ -1,13 +1,9 @@
-#ifndef DCMLITE_BINARY_FILE_H_
-#define DCMLITE_BINARY_FILE_H_
 #pragma once
 
-// A wrapper of C file IO for reading and writing in binary mode.
-
-#include <cassert>
-#include <cstdint>
-#include <cstdio>
+#include <fstream>
+#include <stdint.h>
 #include <string>
+#include <string_view>
 
 namespace dcmlite {
 
@@ -29,37 +25,35 @@ public:
         Close();
     }
 
-    bool Open(const char* filename, Mode mode);
+    bool Open(std::string_view filename, Mode mode);
 
     void Close();
 
-    bool IsOk() const
+    inline bool IsOk() const
     {
-        return file_ != NULL;
+        return m_file.good();
     }
 
-    Mode mode() const
+    inline Mode mode() const
     {
-        return mode_;
+        return m_mode;
     }
 
-    // \param origin Position to which offset is added, could be
-    //               SEEK_SET, SEEK_CUR, or SEEK_END.
-    bool Seek(long offset, int origin = SEEK_SET)
+    inline bool Seek(long offset, std::ios_base::seekdir origin = std::ios::beg)
     {
-        assert(IsOk());
-        return std::fseek(file_, offset, origin) == 0;
+        m_file.seekg(offset, origin);
+        return IsOk();
     }
 
     std::size_t ReadBytes(void* bytes, std::size_t count)
     {
-        assert(IsOk());
-        return std::fread(bytes, 1, count, file_);
+        m_file.read(reinterpret_cast<char*>(bytes), count);
+        return m_file.gcount();
     }
 
     bool UndoRead(std::size_t byte_count)
     {
-        return Seek(-(long)byte_count, SEEK_CUR);
+        return Seek(-(long)byte_count, std::ios::cur);
     }
 
     bool ReadUint8(std::uint8_t* value)
@@ -86,39 +80,40 @@ public:
         return ReadBytes(&(*value)[0], count) == count;
     }
 
-    std::size_t WriteBytes(const void* bytes, std::size_t count)
+    inline void WriteBytes(const void* bytes, std::size_t count)
     {
-        assert(IsOk());
-        return std::fwrite(bytes, 1, count, file_);
+        m_file.write(reinterpret_cast<const char*>(bytes), count);
     }
 
-    bool WriteUint8(std::uint8_t value)
+    inline bool WriteUint8(std::uint8_t value)
     {
-        return WriteBytes(&value, 1) == 1;
-    }
-
-    // NOTE: Byte order is not considered.
-    bool WriteUint16(std::uint16_t value)
-    {
-        return WriteBytes(&value, 2) == 2;
+        WriteBytes(&value, 1);
+        return IsOk();
     }
 
     // NOTE: Byte order is not considered.
-    bool WriteUint32(std::uint32_t value)
+    inline bool WriteUint16(std::uint16_t value)
     {
-        return WriteBytes(&value, 4) == 4;
+        WriteBytes(&value, 2);
+        return IsOk();
     }
 
-    bool WriteString(const std::string& value)
+    // NOTE: Byte order is not considered.
+    inline bool WriteUint32(std::uint32_t value)
     {
-        return WriteBytes(value.c_str(), value.size()) == value.size();
+        WriteBytes(&value, 4);
+        return IsOk();
+    }
+
+    inline bool WriteString(std::string_view value)
+    {
+        WriteBytes(value.data(), value.size());
+        return IsOk();
     }
 
 private:
-    std::FILE* file_;
-    Mode mode_;
+    std::fstream m_file;
+    Mode m_mode;
 };
 
 } // namespace dcmlite
-
-#endif // DCMLITE_BINARY_FILE_H_

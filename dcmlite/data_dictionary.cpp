@@ -45,7 +45,7 @@ const DataEntry* DataDictionary::FindEntry(Tag tag) const
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 } // namespace dcmlite

@@ -16,7 +16,7 @@ namespace dcmlite {
 static bool CheckVrExplicity(BinaryFile& file, bool* explicit_vr)
 {
     // Skip the 4 tag bytes.
-    if (!file.Seek(4, SEEK_CUR)) {
+    if (!file.Seek(4, std::ios::cur)) {
         return false;
     }
 
@@ -29,7 +29,7 @@ static bool CheckVrExplicity(BinaryFile& file, bool* explicit_vr)
     file.UndoRead(6); // Put it back.
 
     // Check to see if the 2 bytes following the tag field represents a valid VR.
-    if (VR::FromString(vr_str, NULL)) {
+    if (VR::FromString(vr_str, nullptr)) {
         *explicit_vr = true;
     } else {
         *explicit_vr = false;
@@ -55,7 +55,7 @@ static bool CheckEndianType(BinaryFile& file, Endian* endian)
     const DataEntry* entry_l = DataDictionary::Get().FindEntry(tag_l);
     const DataEntry* entry_b = DataDictionary::Get().FindEntry(tag_b);
 
-    if (entry_l == NULL && entry_b == NULL) {
+    if (entry_l == nullptr && entry_b == nullptr) {
         if (element == 0) {
             // Group Length tag not in data dictionary, check the group number.
             // For the first tag, group number is more probable of 0008 than 0800.
@@ -70,9 +70,9 @@ static bool CheckEndianType(BinaryFile& file, Endian* endian)
             *endian = kLittleEndian;
         }
     } else {
-        if (entry_l == NULL) {
+        if (entry_l == nullptr) {
             *endian = kBigEndian;
-        } else if (entry_b == NULL) {
+        } else if (entry_b == nullptr) {
             *endian = kLittleEndian;
         } else {
             // Both tags are valid, check the group number.
@@ -189,7 +189,7 @@ std::uint32_t DicomReader::ReadFile(BinaryFile& file,
         if (tag == kSeqEndTag) {
             // Skip the 4-byte zero length of this sequence delimitation item.
             //std::cout << "Sequence delimitation item." << std::endl;
-            file.Seek(4, SEEK_CUR);
+            file.Seek(4, std::ios::cur);
             read_length += 4;
 
             if (handler_->OnElementStart(tag)) {
@@ -203,7 +203,7 @@ std::uint32_t DicomReader::ReadFile(BinaryFile& file,
         if (tag == kSeqItemEndTag) {
             // Skip the 4-byte zero length of this item delimitation item.
             //std::cout << "Item delimitation item." << std::endl;
-            file.Seek(4, SEEK_CUR);
+            file.Seek(4, std::ios::cur);
             read_length += 4;
 
             if (handler_->OnElementStart(tag)) {
@@ -256,7 +256,7 @@ std::uint32_t DicomReader::ReadFile(BinaryFile& file,
             } else {
                 // Query VR type from data dictionary.
                 const DataEntry* data_entry = DataDictionary::Get().FindEntry(tag);
-                if (data_entry != NULL) {
+                if (data_entry != nullptr) {
                     vr_type = data_entry->vr_type;
                 } else {
                     // TODO: How to handle private tags in implicit VR?
