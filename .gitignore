@@ -1,0 +1,3 @@
+.vscode/
+third_party/
+bazel-*

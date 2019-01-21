@@ -1,9 +1,7 @@
-#ifndef DCMLITE_UTIL_H_
-#define DCMLITE_UTIL_H_
 #pragma once
 
-#include <chrono>
 #include "dcmlite/vr.h"
+#include <chrono>
 
 // Misc utilities.
 
@@ -22,13 +20,11 @@ bool Is16BitsFollowingVrReversed(VR::Type vr_type);
 // }
 class TimeIt {
 public:
-  TimeIt();
-  ~TimeIt();
+    TimeIt();
+    ~TimeIt();
 
 private:
-  std::chrono::system_clock::time_point start_;
+    std::chrono::system_clock::time_point start_;
 };
 
-}  // namespace dcmlite
-
-#endif  // DCMLITE_UTIL_H_
+} // namespace dcmlite

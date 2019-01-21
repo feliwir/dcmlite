@@ -1,5 +1,3 @@
-#ifndef DCMLITE_DATA_DICTIONARY_H_
-#define DCMLITE_DATA_DICTIONARY_H_
 #pragma once
 
 // Data dictionary singleton.
@@ -11,16 +9,14 @@ namespace dcmlite {
 
 class DataDictionary {
 public:
-  static DataDictionary& Get();
+    static DataDictionary& Get();
 
-  ~DataDictionary() = default;
+    ~DataDictionary() = default;
 
-  const DataEntry* FindEntry(Tag tag) const;
+    const DataEntry* FindEntry(Tag tag) const;
 
 private:
-  DataDictionary() = default;
+    DataDictionary() = default;
 };
 
-}  // namespace dcmlite
-
-#endif  // DCMLITE_DATA_DICTIONARY_H_
+} // namespace dcmlite

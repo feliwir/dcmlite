@@ -3,27 +3,31 @@
 namespace dcmlite {
 
 BinaryFile::BinaryFile()
-    : file_(NULL), mode_(Mode::READ) {
+    : file_(NULL)
+    , mode_(Mode::READ)
+{
 }
 
-bool BinaryFile::Open(const char* filename, Mode mode) {
-  Close();
+bool BinaryFile::Open(const char* filename, Mode mode)
+{
+    Close();
 
-  mode_ = mode;
+    mode_ = mode;
 
-  if (mode == Mode::READ) {
-    file_ = std::fopen(filename, "rb");
-  } else {
-    file_ = std::fopen(filename, "wb");
-  }
+    if (mode == Mode::READ) {
+        file_ = std::fopen(filename, "rb");
+    } else {
+        file_ = std::fopen(filename, "wb");
+    }
 
-  return IsOk();
+    return IsOk();
 }
 
-void BinaryFile::Close() {
-  if (file_ != NULL) {
-    std::fclose(file_);
-  }
+void BinaryFile::Close()
+{
+    if (file_ != NULL) {
+        std::fclose(file_);
+    }
 }
 
-}  // namespace dcmlite
+} // namespace dcmlite
