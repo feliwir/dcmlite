@@ -13,7 +13,7 @@ namespace dcmlite {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static bool CheckVrExplicity(BinaryFile& file, bool* explicit_vr)
+static bool CheckVrExplicity(BinaryFile& file, bool& explicit_vr)
 {
     // Skip the 4 tag bytes.
     if (!file.Seek(4, std::ios::cur)) {
@@ -21,7 +21,7 @@ static bool CheckVrExplicity(BinaryFile& file, bool* explicit_vr)
     }
 
     std::string vr_str;
-    if (!file.ReadString(&vr_str, 2)) {
+    if (!file.ReadString(vr_str, 2)) {
         file.UndoRead(4); // Put 4 tag bytes back.
         return false;
     }
@@ -29,10 +29,10 @@ static bool CheckVrExplicity(BinaryFile& file, bool* explicit_vr)
     file.UndoRead(6); // Put it back.
 
     // Check to see if the 2 bytes following the tag field represents a valid VR.
-    if (VR::FromString(vr_str, nullptr)) {
-        *explicit_vr = true;
+    if (VR::FromString(vr_str, NULL)) {
+        explicit_vr = true;
     } else {
-        *explicit_vr = false;
+        explicit_vr = false;
     }
 
     return true;
@@ -55,7 +55,7 @@ static bool CheckEndianType(BinaryFile& file, Endian* endian)
     const DataEntry* entry_l = DataDictionary::Get().FindEntry(tag_l);
     const DataEntry* entry_b = DataDictionary::Get().FindEntry(tag_b);
 
-    if (entry_l == nullptr && entry_b == nullptr) {
+    if (entry_l == NULL && entry_b == NULL) {
         if (element == 0) {
             // Group Length tag not in data dictionary, check the group number.
             // For the first tag, group number is more probable of 0008 than 0800.
@@ -70,9 +70,9 @@ static bool CheckEndianType(BinaryFile& file, Endian* endian)
             *endian = kLittleEndian;
         }
     } else {
-        if (entry_l == nullptr) {
+        if (entry_l == NULL) {
             *endian = kBigEndian;
-        } else if (entry_b == nullptr) {
+        } else if (entry_b == NULL) {
             *endian = kLittleEndian;
         } else {
             // Both tags are valid, check the group number.
@@ -112,7 +112,7 @@ bool DicomReader::ReadFile(const std::string& file_path)
     file.Seek(128);
 
     std::string prefix;
-    if (!file.ReadString(&prefix, 4)) {
+    if (!file.ReadString(prefix, 4)) {
         return false; // TODO: Use exception?
     }
 
@@ -124,7 +124,7 @@ bool DicomReader::ReadFile(const std::string& file_path)
     // NOTE:
     // The 0002 group will always be Little Endian even if the DICOM file
     // is Big Endian. So don't check endian type right now.
-    if (!CheckVrExplicity(file, &explicit_vr_)) {
+    if (!CheckVrExplicity(file, explicit_vr_)) {
         return false;
     }
 
@@ -151,7 +151,7 @@ std::uint32_t DicomReader::ReadFile(BinaryFile& file,
             break; // Handler required to stop reading.
         }
 
-        if (!ReadTag(file, &tag)) {
+        if (!ReadTag(file, tag)) {
             break;
         }
 
@@ -171,7 +171,7 @@ std::uint32_t DicomReader::ReadFile(BinaryFile& file,
                 // Some DICOM files, VR is explicit in 0x0002 group while implicit
                 // in others. E.g., CS7600 generated DICOM files.
                 // TODO: Add explicit_vr_0002_?
-                CheckVrExplicity(file, &explicit_vr_);
+                CheckVrExplicity(file, explicit_vr_);
 
                 // Tell read handler.
                 handler_->OnExplicitVR(explicit_vr_);
@@ -215,7 +215,7 @@ std::uint32_t DicomReader::ReadFile(BinaryFile& file,
 
         if (tag == kSeqItemPrefixTag) {
             std::uint32_t item_length = 0;
-            ReadUint32(file, &item_length);
+            ReadUint32(file, item_length);
             read_length += 4;
 
             if (handler_->OnElementStart(tag)) {
@@ -242,7 +242,7 @@ std::uint32_t DicomReader::ReadFile(BinaryFile& file,
 
         if (explicit_vr_) {
             std::string vr_str;
-            file.ReadString(&vr_str, 2);
+            file.ReadString(vr_str, 2);
             read_length += 2;
 
             if (!VR::FromString(vr_str, &vr_type)) {
@@ -256,7 +256,7 @@ std::uint32_t DicomReader::ReadFile(BinaryFile& file,
             } else {
                 // Query VR type from data dictionary.
                 const DataEntry* data_entry = DataDictionary::Get().FindEntry(tag);
-                if (data_entry != nullptr) {
+                if (data_entry != NULL) {
                     vr_type = data_entry->vr_type;
                 } else {
                     // TODO: How to handle private tags in implicit VR?
@@ -276,7 +276,7 @@ std::uint32_t DicomReader::ReadFile(BinaryFile& file,
             // See PS 3.5 Section 7.1.2 - Data Element Structure with Explicit VR.
 
             std::uint16_t vl16 = 0;
-            ReadUint16(file, &vl16);
+            ReadUint16(file, vl16);
             read_length += 2;
 
             if (vl16 != 0) {
@@ -289,7 +289,7 @@ std::uint32_t DicomReader::ReadFile(BinaryFile& file,
                     //std::cout << "2 bytes following VR are reserved." << std::endl;
 
                     // This 2 bytes are reserved, read the 4-byte value length.
-                    ReadUint32(file, &vl32);
+                    ReadUint32(file, vl32);
                     read_length += 4;
                 } else {
                     // Value length is 0.
@@ -297,7 +297,7 @@ std::uint32_t DicomReader::ReadFile(BinaryFile& file,
                 }
             }
         } else { // Implicit VR
-            ReadUint32(file, &vl32);
+            ReadUint32(file, vl32);
             read_length += 4;
         }
 
@@ -340,38 +340,38 @@ std::uint32_t DicomReader::ReadFile(BinaryFile& file,
     return read_length;
 }
 
-bool DicomReader::ReadTag(BinaryFile& file, Tag* tag)
+bool DicomReader::ReadTag(BinaryFile& file, Tag& tag)
 {
     std::uint16_t group = 0;
     std::uint16_t element = 0;
 
-    if (!ReadUint16(file, &group)) {
+    if (!ReadUint16(file, group)) {
         return false;
     }
 
-    if (!ReadUint16(file, &element)) {
+    if (!ReadUint16(file, element)) {
         return false;
     }
 
-    tag->set_group(group);
-    tag->set_element(element);
+    tag.set_group(group);
+    tag.set_element(element);
 
     return true;
 }
 
-bool DicomReader::ReadUint16(BinaryFile& file, std::uint16_t* value)
+bool DicomReader::ReadUint16(BinaryFile& file, std::uint16_t& value)
 {
     if (file.ReadUint16(value)) {
-        AdjustBytesUint16(*value);
+        AdjustBytesUint16(value);
         return true;
     }
     return false;
 }
 
-bool DicomReader::ReadUint32(BinaryFile& file, std::uint32_t* value)
+bool DicomReader::ReadUint32(BinaryFile& file, std::uint32_t& value)
 {
     if (file.ReadUint32(value)) {
-        AdjustBytesUint32(*value);
+        AdjustBytesUint32(value);
         return true;
     }
     return false;

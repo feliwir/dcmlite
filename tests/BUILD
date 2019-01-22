@@ -1,14 +1,17 @@
 cc_test(
     name = "loading_test",
+    size = "small",
     srcs = ["load.cpp"],
-    copts = ["-Iexternal/gtest/include", "-std=c++17"],
-    linkopts = ["-lstdc++fs"],
-    deps = [
-        "@gtest//:main",
-        "//dcmlite",
+    copts = [
+        "-Iexternal/gtest/include",
+        "-std=c++17",
     ],
     data = [
-        "//data:CR"
+        "//data:CR",
     ],
-    size = "small"
+    linkopts = ["-lstdc++fs"],
+    deps = [
+        "//dcmlite",
+        "@gtest//:main",
+    ],
 )

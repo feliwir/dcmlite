@@ -54,7 +54,7 @@ void DumpReadHandler::OnSeqElementEnd(DataSet* data_set)
 FullReadHandler::FullReadHandler(DataSet* data_set)
     : data_set_(data_set)
 {
-    data_set_stack_.push_back(data_set);
+    data_set_stack_.emplace_back(data_set);
 }
 
 void FullReadHandler::OnEndian(Endian endian)
@@ -77,7 +77,7 @@ void FullReadHandler::OnSeqElementStart(DataSet* data_set)
 {
     assert(!data_set_stack_.empty());
     data_set_stack_.back()->AddElement(data_set);
-    data_set_stack_.push_back(data_set);
+    data_set_stack_.emplace_back(data_set);
 }
 
 void FullReadHandler::OnSeqElementEnd(DataSet* /*data_set*/)
@@ -90,7 +90,7 @@ void FullReadHandler::OnSeqElementEnd(DataSet* /*data_set*/)
 TagsReadHandler::TagsReadHandler(DataSet* data_set)
     : data_set_(data_set)
 {
-    data_set_stack_.push_back(data_set);
+    data_set_stack_.emplace_back(data_set);
 }
 
 TagsReadHandler::~TagsReadHandler()
@@ -145,7 +145,7 @@ void TagsReadHandler::OnSeqElementStart(DataSet* data_set)
 {
     assert(!data_set_stack_.empty());
     data_set_stack_.back()->AddElement(data_set);
-    data_set_stack_.push_back(data_set);
+    data_set_stack_.emplace_back(data_set);
 }
 
 void TagsReadHandler::OnSeqElementEnd(DataSet* /*data_set*/)
@@ -156,7 +156,7 @@ void TagsReadHandler::OnSeqElementEnd(DataSet* /*data_set*/)
 TagsReadHandler& TagsReadHandler::AddTag(Tag tag)
 {
     if (tags_.empty()) {
-        tags_.push_back(tag);
+        tags_.emplace_back(tag);
         return *this;
     }
 

@@ -9,7 +9,6 @@
 
 namespace dcmlite {
 
-class BinaryFile;
 class Visitor;
 
 class DataSet : public DataElement {

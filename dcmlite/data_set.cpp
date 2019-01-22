@@ -1,5 +1,6 @@
 #include "dcmlite/data_set.h"
 #include "dcmlite/visitor.h"
+#include <algorithm>
 #include <cassert>
 #include <iostream>
 
@@ -46,17 +47,19 @@ const DataElement* DataSet::At(std::size_t index) const
 
 void DataSet::AddElement(DataElement* element)
 {
-    m_elements.push_back(element);
+    m_elements.emplace_back(element);
 }
 
 const DataElement* DataSet::GetElement(Tag tag) const
 {
-    for (DataElement* element : m_elements) {
-        if (element->tag() == tag) {
-            return element;
-        }
-    }
-    return nullptr;
+    auto element = std::find_if(m_elements.begin(), m_elements.end(), [&tag](DataElement* el) {
+        return el->tag() == tag;
+    });
+
+    if (element == m_elements.end())
+        return nullptr;
+
+    return *element;
 }
 
 void DataSet::Clear()

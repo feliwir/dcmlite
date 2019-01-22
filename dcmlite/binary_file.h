@@ -56,28 +56,28 @@ public:
         return Seek(-(long)byte_count, std::ios::cur);
     }
 
-    bool ReadUint8(std::uint8_t* value)
+    bool ReadUint8(std::uint8_t& value)
     {
-        return ReadBytes(value, 1) == 1;
+        return ReadBytes(&value, 1) == 1;
     }
 
     // NOTE: Byte order is not considered.
-    bool ReadUint16(std::uint16_t* value)
+    bool ReadUint16(std::uint16_t& value)
     {
-        return ReadBytes(value, 2) == 2;
+        return ReadBytes(&value, 2) == 2;
     }
 
     // NOTE: Byte order is not considered.
-    bool ReadUint32(std::uint32_t* value)
+    bool ReadUint32(std::uint32_t& value)
     {
-        return ReadBytes(value, 4) == 4;
+        return ReadBytes(&value, 4) == 4;
     }
 
-    bool ReadString(std::string* value, std::size_t count)
+    bool ReadString(std::string& value, std::size_t count)
     {
-        value->resize(count);
+        value.resize(count);
         // NOTE: ReadBytes(value, count) doesn't work!
-        return ReadBytes(&(*value)[0], count) == count;
+        return ReadBytes(value.data(), count) == count;
     }
 
     inline void WriteBytes(const void* bytes, std::size_t count)
@@ -85,21 +85,21 @@ public:
         m_file.write(reinterpret_cast<const char*>(bytes), count);
     }
 
-    inline bool WriteUint8(std::uint8_t value)
+    inline bool WriteUint8(const std::uint8_t value)
     {
         WriteBytes(&value, 1);
         return IsOk();
     }
 
     // NOTE: Byte order is not considered.
-    inline bool WriteUint16(std::uint16_t value)
+    inline bool WriteUint16(const std::uint16_t value)
     {
         WriteBytes(&value, 2);
         return IsOk();
     }
 
     // NOTE: Byte order is not considered.
-    inline bool WriteUint32(std::uint32_t value)
+    inline bool WriteUint32(const std::uint32_t value)
     {
         WriteBytes(&value, 4);
         return IsOk();

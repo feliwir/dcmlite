@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 
+#include "cxxopts.hpp"
+
 #include "dcmlite/dcmlite.h"
 
 std::string EndianToString(dcmlite::Endian endian)
@@ -23,25 +25,25 @@ void DumpDicomFile(const std::string& file_path)
     std::cout << std::endl;
 }
 
-void Help(const char* argv0)
-{
-    std::cout << "Usage:" << std::endl;
-    std::cout << "  " << argv0 << " <file_path>" << std::endl;
-}
-
 int main(int argc, char* argv[])
 {
-    if (argc != 2) {
-        Help(argv[0]);
-        return 1;
+    cxxopts::Options options("dcmdump", "Dump the tags of a DICOM file.");
+    options.add_options("General")
+    ("d,debug", "Enable debug mode")
+    ("h,help",  "Print help")
+    ("i,input", "Input file to dump", cxxopts::value<std::string>());
+
+    options.parse_positional({ "input" });
+
+    auto result = options.parse(argc, argv);
+
+    if (result.count("help") || result.count("input")==0)
+    {
+        std::cout << options.help({}) << std::endl;
+        return 0;
     }
 
-    std::cout << "Platform: "
-              << EndianToString(dcmlite::PlatformEndian())
-              << std::endl
-              << std::endl;
-
-    std::string file_path = argv[1];
+    auto file_path = result["input"].as<std::string>();
     std::cout << "file path: " << file_path << std::endl;
     std::cout << std::endl;
 
