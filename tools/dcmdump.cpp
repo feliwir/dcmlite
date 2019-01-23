@@ -1,7 +1,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <string>
+#include <string_view>
 
 #include "cxxopts.hpp"
 
@@ -16,7 +16,7 @@ std::string EndianToString(dcmlite::Endian endian)
     }
 }
 
-void DumpDicomFile(const std::string& file_path)
+void DumpDicomFile(std::string_view file_path)
 {
     dcmlite::DumpReadHandler read_handler;
     dcmlite::DicomReader reader(&read_handler);

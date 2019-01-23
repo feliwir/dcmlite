@@ -101,10 +101,10 @@ DicomReader::DicomReader()
 {
 }
 
-bool DicomReader::ReadFile(const std::string& file_path)
+bool DicomReader::ReadFile(std::string_view file_path)
 {
     BinaryFile file;
-    if (!file.Open(file_path.c_str(), BinaryFile::READ)) {
+    if (!file.Open(file_path, BinaryFile::READ)) {
         return false;
     }
 

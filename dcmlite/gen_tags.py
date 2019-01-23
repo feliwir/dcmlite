@@ -31,5 +31,5 @@ def dump_dict_cpp(fi, fo):
     fo.write('}  // namespace dcmlite\n')
 
 
-with open("dict.txt", 'r') as fi, open('tag_table.cpp', 'w') as fo:
+with open("dcmlite/dict.txt", 'r') as fi, open('tag_table.cpp', 'w') as fo:
     dump_dict_cpp(fi, fo)

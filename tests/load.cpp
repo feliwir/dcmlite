@@ -11,7 +11,7 @@ void testFile(std::string_view path)
     dcmlite::DicomReader reader(&read_handler);
 
     // Try to open one of my CR datasets
-    EXPECT_TRUE(reader.ReadFile("./data/CR/00000000"));
+    EXPECT_TRUE(reader.ReadFile(path));
 
     // Retrieve the patient name
     std::string patient_name;
@@ -22,6 +22,6 @@ void testFile(std::string_view path)
 TEST(LoadDicom, CR)
 {
     for (auto& p : std::filesystem::directory_iterator("./data/CR")) {
-        testFile("./data/CR" + p.path().filename().string());
+        testFile("./data/CR/" + p.path().filename().string());
     }
 }

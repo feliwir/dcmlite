@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstdint>
-#include <string>
+#include <string_view>
 #include <vector>
 
 #include "dcmlite/defs.h"
@@ -21,7 +21,7 @@ public:
     DicomReader();
 
     // Read a DICOM file.
-    bool ReadFile(const std::string& file_path);
+    bool ReadFile(std::string_view file_path);
 
 private:
     // Read data element sequentially from the file.
