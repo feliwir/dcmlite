@@ -12,79 +12,79 @@ namespace dcmlite {
 class Visitor;
 
 class DataSet : public DataElement {
-public:
-    // NOTE:
-    // The data set will be nested (SQ) if the tag is not empty.
-    // The VR (UNKNOWN or SQ) is determined by if the tag is empty or not.
-    DataSet(Tag tag = Tag(), Endian endian = kLittleEndian);
+  public:
+  // NOTE:
+  // The data set will be nested (SQ) if the tag is not empty.
+  // The VR (UNKNOWN or SQ) is determined by if the tag is empty or not.
+  DataSet(Tag tag = Tag(), Endian endian = kLittleEndian);
 
-    virtual ~DataSet();
+  virtual ~DataSet();
 
-    // TODO: const?
-    virtual void Accept(Visitor& visitor) override;
+  // TODO: const?
+  virtual void Accept(Visitor& visitor) override;
 
-    Endian endian() const
-    {
-        return endian_;
-    }
-    void set_endian(Endian endian)
-    {
-        endian_ = endian;
-    }
+  Endian endian() const
+  {
+    return endian_;
+  }
+  void set_endian(Endian endian)
+  {
+    endian_ = endian;
+  }
 
-    bool explicit_vr() const
-    {
-        return explicit_vr_;
-    }
-    void set_explicit_vr(bool explicit_vr)
-    {
-        explicit_vr_ = explicit_vr;
-    }
+  bool explicit_vr() const
+  {
+    return explicit_vr_;
+  }
+  void set_explicit_vr(bool explicit_vr)
+  {
+    explicit_vr_ = explicit_vr;
+  }
 
-    // Get the number of child elements.
-    inline std::size_t GetSize() const
-    {
-        return m_elements.size();
-    }
+  // Get the number of child elements.
+  inline std::size_t GetSize() const
+  {
+    return m_elements.size();
+  }
 
-    // Get the element at the given index.
-    DataElement* operator[](std::size_t index);
+  // Get the element at the given index.
+  DataElement* operator[](std::size_t index);
 
-    // Get the element at the given index.
-    const DataElement* operator[](std::size_t index) const;
+  // Get the element at the given index.
+  const DataElement* operator[](std::size_t index) const;
 
-    // Get the element at the given index.
-    // Return nullptr if out of index (
-    const DataElement* At(std::size_t index) const;
+  // Get the element at the given index.
+  // Return nullptr if out of index (
+  const DataElement* At(std::size_t index) const;
 
-    void AddElement(DataElement* element);
+  void AddElement(DataElement* element);
 
-    const DataElement* GetElement(Tag tag) const;
+  const DataElement* GetElement(Tag tag) const;
 
-    // Clear data elements, reset endian type, etc.
-    void Clear();
+  // Clear data elements, reset endian type, etc.
+  void Clear();
 
-    // Get raw buffer (binary data).
-    bool GetBuffer(Tag tag,
-        Buffer& buffer,
-        std::size_t& length) const;
+  // Get raw buffer (binary data).
+  bool GetBuffer(Tag tag,
+      Buffer& buffer,
+      std::size_t& length) const;
 
-    bool GetString(Tag tag, std::string& value) const;
+  bool GetString(Tag tag, std::string& value) const;
 
-    bool GetUint16(Tag tag, std::uint16_t& value) const;
-    bool GetUint32(Tag tag, std::uint32_t& value) const;
+  bool GetUint16(Tag tag, std::uint16_t& value) const;
+  bool GetUint32(Tag tag, std::uint32_t& value) const;
 
-    bool GetInt16(Tag tag, std::int16_t& value) const;
-    bool GetInt32(Tag tag, std::int32_t& value) const;
+  bool GetInt16(Tag tag, std::int16_t& value) const;
+  bool GetInt32(Tag tag, std::int32_t& value) const;
 
-    bool GetFloat32(Tag tag, float32_t& value) const;
-    bool GetFloat64(Tag tag, float64_t& value) const;
+  bool GetFloat32(Tag tag, float32_t& value) const;
+  bool GetFloat64(Tag tag, float64_t& value) const;
 
-private:
-    bool explicit_vr_;
+  private:
+  bool explicit_vr_;
 
-    // Child elements.
-    std::vector<DataElement*> m_elements;
+  // Child elements.
+  std::vector<DataElement*> m_elements;
 };
 
 } // namespace dcmlite

@@ -11,19 +11,19 @@ const Tag kSeqItemPrefixTag(0xFFFE, 0xE000);
 
 std::ostream& operator<<(std::ostream& os, Tag tag)
 {
-    using namespace std;
+  using namespace std;
 
-    ios::fmtflags old_flags = os.flags(ios::right | ios::hex | ios::uppercase);
+  ios::fmtflags old_flags = os.flags(ios::right | ios::hex | ios::uppercase);
 
-    os << "(";
-    os << setfill('0') << setw(4) << tag.group();
-    os << ", ";
-    os << setfill('0') << setw(4) << tag.element();
-    os << ")";
+  os << "(";
+  os << setfill('0') << setw(4) << tag.group();
+  os << ", ";
+  os << setfill('0') << setw(4) << tag.element();
+  os << ")";
 
-    os.flags(old_flags);
+  os.flags(old_flags);
 
-    return os;
+  return os;
 }
 
 } // namespace dcmlite

@@ -6,8 +6,8 @@
 namespace dcmlite {
 
 enum Endian {
-    kLittleEndian,
-    kBigEndian,
+  kLittleEndian,
+  kBigEndian,
 };
 
 // Return the endian type of the current platform.

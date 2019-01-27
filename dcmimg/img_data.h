@@ -5,11 +5,15 @@
 #include <string>
 #include <string_view>
 
-#include "data_set.h"
+#include "dcmlite/data_set.h"
 
 namespace dcmlite::img {
 
-class ImageData {
+class ImageData final {
+  public:
+  ImageData();
+
+  bool LoadFromDataSet(const DataSet& dataset);
 };
 
 }

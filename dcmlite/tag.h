@@ -22,91 +22,91 @@ extern const Tag kSeqItemPrefixTag; // (0xFFFE, 0xE000)
 //   Since the size of a tag is only 4-bytes, feel free to pass and
 //   return by value.
 class Tag {
-public:
-    Tag() = default;
-    Tag(const Tag& rhs) = default;
-    Tag& operator=(const Tag& rhs) = default;
+  public:
+  Tag() = default;
+  Tag(const Tag& rhs) = default;
+  Tag& operator=(const Tag& rhs) = default;
 
-    Tag(std::uint16_t group, std::uint16_t element)
-        : group_(group)
-        , element_(element)
-    {
-    }
+  Tag(std::uint16_t group, std::uint16_t element)
+      : group_(group)
+      , element_(element)
+  {
+  }
 
-    Tag(std::uint32_t tag_key)
-        : group_((tag_key >> 16) & 0xFFFF)
-        , element_(tag_key & 0xFFFF)
-    {
-    }
+  Tag(std::uint32_t tag_key)
+      : group_((tag_key >> 16) & 0xFFFF)
+      , element_(tag_key & 0xFFFF)
+  {
+  }
 
-    std::uint16_t group() const
-    {
-        return group_;
-    }
-    void set_group(std::uint16_t group)
-    {
-        group_ = group;
-    }
+  std::uint16_t group() const
+  {
+    return group_;
+  }
+  void set_group(std::uint16_t group)
+  {
+    group_ = group;
+  }
 
-    std::uint16_t element() const
-    {
-        return element_;
-    }
-    void set_element(std::uint16_t element)
-    {
-        element_ = element;
-    }
+  std::uint16_t element() const
+  {
+    return element_;
+  }
+  void set_element(std::uint16_t element)
+  {
+    element_ = element;
+  }
 
-    bool IsEmpty() const
-    {
-        return group_ == 0 && element_ == 0;
-    }
+  bool IsEmpty() const
+  {
+    return group_ == 0 && element_ == 0;
+  }
 
-    Tag SwapBytes() const
-    {
-        return Tag(SwapUint16(group_), SwapUint16(element_));
-    }
+  Tag SwapBytes() const
+  {
+    return Tag(SwapUint16(group_), SwapUint16(element_));
+  }
 
-    // Convert to a 4-byte unsigned integer.
-    // Group in high two bytes, element in low two bytes.
-    std::uint32_t ToUint32() const
-    {
-        return (group_ << 16) + element_;
-    }
+  // Convert to a 4-byte unsigned integer.
+  // Group in high two bytes, element in low two bytes.
+  std::uint32_t ToUint32() const
+  {
+    return (group_ << 16) + element_;
+  }
 
-private:
-    std::uint16_t group_;
-    std::uint16_t element_;
+  private:
+  std::uint16_t group_;
+  std::uint16_t element_;
 };
 
 inline bool operator==(Tag lhs, Tag rhs)
 {
-    return (lhs.group() == rhs.group() && lhs.element() == rhs.element());
+  return (lhs.group() == rhs.group() && lhs.element() == rhs.element());
 }
 
 inline bool operator!=(Tag lhs, Tag rhs)
 {
-    return !(lhs == rhs);
+  return !(lhs == rhs);
 }
 
 inline bool operator<(Tag lhs, Tag rhs)
 {
-    return lhs.ToUint32() < rhs.ToUint32();
+  return lhs.ToUint32() < rhs.ToUint32();
 }
 
 inline bool operator>(Tag lhs, Tag rhs)
 {
-    return lhs.ToUint32() > rhs.ToUint32();
+  return lhs.ToUint32() > rhs.ToUint32();
 }
 
 inline bool operator<=(Tag lhs, Tag rhs)
 {
-    return lhs.ToUint32() <= rhs.ToUint32();
+  return lhs.ToUint32() <= rhs.ToUint32();
 }
 
 inline bool operator>=(Tag lhs, Tag rhs)
 {
-    return lhs.ToUint32() >= rhs.ToUint32();
+  return lhs.ToUint32() >= rhs.ToUint32();
 }
 
 std::ostream& operator<<(std::ostream& os, Tag tag);

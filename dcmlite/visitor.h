@@ -12,13 +12,13 @@ class DataSet;
 
 // Visitor interface.
 class Visitor {
-public:
-    virtual ~Visitor()
-    {
-    }
+  public:
+  virtual ~Visitor()
+  {
+  }
 
-    virtual void VisitDataElement(DataElement* data_element) = 0;
-    virtual void VisitDataSet(DataSet* data_set) = 0;
+  virtual void VisitDataElement(DataElement* data_element) = 0;
+  virtual void VisitDataSet(DataSet* data_set) = 0;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -28,19 +28,19 @@ public:
 //   PrintVisitor v(std::cout);
 //   data_set.Accept(v);
 class PrintVisitor : public Visitor {
-public:
-    explicit PrintVisitor(std::ostream& os);
+  public:
+  explicit PrintVisitor(std::ostream& os);
 
-    virtual ~PrintVisitor()
-    {
-    }
+  virtual ~PrintVisitor()
+  {
+  }
 
-    void VisitDataElement(DataElement* data_element) override;
-    void VisitDataSet(DataSet* data_set) override;
+  void VisitDataElement(DataElement* data_element) override;
+  void VisitDataSet(DataSet* data_set) override;
 
-private:
-    std::ostream& os_;
-    int level_;
+  private:
+  std::ostream& os_;
+  int level_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -51,21 +51,21 @@ private:
 //   WriteVisitor v(ofs);
 //   data_set.Accept(v);
 class WriteVisitor : public Visitor {
-public:
-    explicit WriteVisitor(BinaryFile* file);
+  public:
+  explicit WriteVisitor(BinaryFile* file);
 
-    ~WriteVisitor() override
-    {
-    }
+  ~WriteVisitor() override
+  {
+  }
 
-    void VisitDataElement(DataElement* data_element) override;
-    void VisitDataSet(DataSet* data_set) override;
+  void VisitDataElement(DataElement* data_element) override;
+  void VisitDataSet(DataSet* data_set) override;
 
-private:
-    bool explicit_vr_; // Of current visited data set.
-    int level_;
+  private:
+  bool explicit_vr_; // Of current visited data set.
+  int level_;
 
-    BinaryFile* file_;
+  BinaryFile* file_;
 };
 
 } // namespace dcmlite

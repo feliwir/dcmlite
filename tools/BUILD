@@ -11,3 +11,17 @@ cc_binary(
         "@cxxopts//:main",
     ],
 )
+
+cc_binary(
+    name = "dcm2pnm",
+    srcs = ["dcm2pnm.cpp"],
+    copts = [
+        "-std=c++17",
+        "-Iexternal/cxxopts/include",
+    ],
+    deps = [
+        "//dcmlite",
+        "//dcmimg",
+        "@cxxopts//:main",
+    ],
+)

@@ -1,3 +1,4 @@
 .vscode/
 third_party/
 bazel-*
+.clwb/

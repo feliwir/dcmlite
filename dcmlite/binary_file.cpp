@@ -9,22 +9,22 @@ BinaryFile::BinaryFile()
 
 bool BinaryFile::Open(std::string_view filename, Mode mode)
 {
-    Close();
+  Close();
 
-    m_mode = mode;
+  m_mode = mode;
 
-    if (mode == Mode::READ) {
-        m_file.open(filename.data(), std::ios::binary | std::ios::in);
-    } else {
-        m_file.open(filename.data(), std::ios::binary | std::ios::out);
-    }
+  if (mode == Mode::READ) {
+    m_file.open(filename.data(), std::ios::binary | std::ios::in);
+  } else {
+    m_file.open(filename.data(), std::ios::binary | std::ios::out);
+  }
 
-    return IsOk();
+  return IsOk();
 }
 
 void BinaryFile::Close()
 {
-    m_file.close();
+  m_file.close();
 }
 
 } // namespace dcmlite

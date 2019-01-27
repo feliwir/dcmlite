@@ -4,20 +4,16 @@
 #include <string_view>
 
 #include "cxxopts.hpp"
+#include "dcmimg/img_data.h"
 #include "dcmlite/dcmlite.h"
 
-void DumpDicomFile(std::string_view file_path)
-{
-  dcmlite::DumpReadHandler read_handler;
-  dcmlite::DicomReader reader(&read_handler);
-  reader.ReadFile(file_path);
-
-  std::cout << std::endl;
-}
+const dcmlite::Tag kPixelData(0x7FE0, 0x0010 );
 
 int main(int argc, char* argv[])
 {
-  cxxopts::Options options("dcmdump", "Dump the tags of a DICOM file.");
+  cxxopts::Options options("dcm2pnm", 
+  "Save the pixeldata of the DICOM file as an image file");
+  
   options
       .positional_help("[optional args]")
       .show_positional_help();
@@ -32,7 +28,7 @@ int main(int argc, char* argv[])
 
   auto result = options.parse(argc, argv);
 
-  if (result.count("help") || result.count("input") == 0) {
+  if (result.count("help") || (result.count("input") == 0)) {
     std::cout << options.help({}) << std::endl;
     return 0;
   }
@@ -41,7 +37,15 @@ int main(int argc, char* argv[])
   std::cout << "Filepath: " << file_path << std::endl;
   std::cout << std::endl;
 
-  DumpDicomFile(file_path);
+  dcmlite::DataSet data_set;
+  dcmlite::TagsReadHandler read_handler(&data_set);
+  read_handler.AddTag(kPixelData);
+
+  dcmlite::DicomReader reader(&read_handler);
+  reader.ReadFile(file_path);
+
+  dcmlite::img::ImageData img_data;
+  img_data.LoadFromDataSet(data_set);
 
   return 0;
 }

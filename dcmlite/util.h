@@ -19,12 +19,12 @@ bool Is16BitsFollowingVrReversed(VR::Type vr_type);
 //   <You code to measure the time>
 // }
 class TimeIt {
-public:
-    TimeIt();
-    ~TimeIt();
+  public:
+  TimeIt();
+  ~TimeIt();
 
-private:
-    std::chrono::system_clock::time_point start_;
+  private:
+  std::chrono::system_clock::time_point start_;
 };
 
 } // namespace dcmlite

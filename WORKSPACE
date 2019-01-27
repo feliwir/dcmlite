@@ -16,3 +16,10 @@ new_http_archive(
     build_file = "third_party/cxxopts.BUILD",
     strip_prefix = "cxxopts-2.1.2",
 )
+
+new_http_archive(
+    name = "charls",
+    url = "https://github.com/team-charls/charls/archive/master.zip",
+    build_file = "third_party/charls.BUILD",
+    strip_prefix = "charls-master",
+)

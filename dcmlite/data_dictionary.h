@@ -8,15 +8,15 @@
 namespace dcmlite {
 
 class DataDictionary {
-public:
-    static DataDictionary& Get();
+  public:
+  static DataDictionary& Get();
 
-    ~DataDictionary() = default;
+  ~DataDictionary() = default;
 
-    const DataEntry* FindEntry(Tag tag) const;
+  const DataEntry* FindEntry(Tag tag) const;
 
-private:
-    DataDictionary() = default;
+  private:
+  DataDictionary() = default;
 };
 
 } // namespace dcmlite

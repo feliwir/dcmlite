@@ -3,9 +3,13 @@ cc_library(
     name = "dcmimg",
     srcs = glob(["*.cpp"]),
     hdrs = glob(["*.h"]),
-    copts = ["-std=c++17"],
+    copts = [
+        "-std=c++17",
+        "-Iexternal/charls/include",
+    ],
     visibility = ["//visibility:public"],
     deps = [
         "//dcmlite",
+        "@charls//:main",
     ],
 )
