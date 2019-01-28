@@ -1,15 +1,15 @@
-#include "dcmlite/dicom_reader.h"
+#include "dcmcore/dicom_reader.h"
 
 #include <iostream>
 
-#include "dcmlite/binary_file.h"
-#include "dcmlite/data_dictionary.h"
-#include "dcmlite/data_element.h"
-#include "dcmlite/data_set.h"
-#include "dcmlite/read_handler.h"
-#include "dcmlite/util.h"
+#include "dcmcore/binary_file.h"
+#include "dcmcore/data_dictionary.h"
+#include "dcmcore/data_element.h"
+#include "dcmcore/data_set.h"
+#include "dcmcore/read_handler.h"
+#include "dcmcore/util.h"
 
-namespace dcmlite {
+namespace dcmcore {
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -320,8 +320,8 @@ std::uint32_t DicomReader::ReadFile(BinaryFile& file,
         break; // TODO: return -1 to indicate the error?
       }
 
-      Buffer buffer(new char[vl32]);
-      if (file.ReadBytes(buffer.get(), vl32) != vl32) {
+      Buffer buffer(vl32);
+      if (file.ReadBytes(buffer.data(), vl32) != vl32) {
         std::cerr << "Error: Failed to read value of size: " << vl32 << std::endl;
         break; // TODO: return -1 to indicate the error?
       }
@@ -330,7 +330,7 @@ std::uint32_t DicomReader::ReadFile(BinaryFile& file,
 
       if (handler_->OnElementStart(tag)) {
         DataElement* element = new DataElement(tag, vr_type, endian_);
-        element->SetBuffer(buffer, vl32);
+        element->SetBuffer(buffer);
 
         handler_->OnElementEnd(element);
       }
@@ -380,15 +380,15 @@ bool DicomReader::ReadUint32(BinaryFile& file, std::uint32_t& value)
 void DicomReader::AdjustBytesUint16(std::uint16_t& value) const
 {
   if (endian_ != PlatformEndian()) {
-    value = SwapUint16(value);
+    value = byteswap<uint16_t>(value);
   }
 }
 
 void DicomReader::AdjustBytesUint32(std::uint32_t& value) const
 {
   if (endian_ != PlatformEndian()) {
-    value = SwapUint32(value);
+    value = byteswap<uint32_t>(value);
   }
 }
 
-} // namespace dcmlite
+} // namespace dcmcore

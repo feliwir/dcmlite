@@ -1,8 +1,8 @@
-#include "dcmlite/util.h"
+#include "dcmcore/util.h"
 
 #include <iostream>
 
-namespace dcmlite {
+namespace dcmcore {
 
 bool Is16BitsFollowingVrReversed(VR::Type vr_type)
 {
@@ -42,4 +42,4 @@ TimeIt::~TimeIt()
   std::cout << ms.count() << " ms\n";
 }
 
-} // namespace dcmlite
+} // namespace dcmcore

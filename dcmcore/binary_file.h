@@ -5,7 +5,7 @@
 #include <string>
 #include <string_view>
 
-namespace dcmlite {
+namespace dcmcore {
 
 class BinaryFile {
   public:
@@ -116,4 +116,4 @@ class BinaryFile {
   Mode m_mode;
 };
 
-} // namespace dcmlite
+} // namespace dcmcore

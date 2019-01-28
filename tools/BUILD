@@ -7,7 +7,7 @@ cc_binary(
         "-Iexternal/cxxopts/include",
     ],
     deps = [
-        "//dcmlite",
+        "//dcmcore",
         "@cxxopts//:main",
     ],
 )
@@ -20,7 +20,7 @@ cc_binary(
         "-Iexternal/cxxopts/include",
     ],
     deps = [
-        "//dcmlite",
+        "//dcmcore",
         "//dcmimg",
         "@cxxopts//:main",
     ],

@@ -1,7 +1,7 @@
 // NOTE: This file was automatically generated.
-#include "dcmlite/tag_table.h"
+#include "dcmcore/tag_table.h"
 
-namespace dcmlite {
+namespace dcmcore {
 
 const DataEntry g_tag_table[] = {
   { 0x00020000, VR::UL, "FileMetaInformationGroupLength", "File Meta Information Group Length" },
@@ -3625,4 +3625,4 @@ const DataEntry g_tag_table[] = {
 
 const std::size_t TAG_COUNT = 3617;
 
-} // namespace dcmlite
+} // namespace dcmcore

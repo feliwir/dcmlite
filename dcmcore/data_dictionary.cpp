@@ -3,9 +3,9 @@
 #include <memory>
 #include <mutex>
 
-#include "dcmlite/tag_table.h"
+#include "dcmcore/tag_table.h"
 
-namespace dcmlite {
+namespace dcmcore {
 
 DataDictionary& DataDictionary::Get()
 {
@@ -48,4 +48,4 @@ const DataEntry* DataDictionary::FindEntry(Tag tag) const
   return nullptr;
 }
 
-} // namespace dcmlite
+} // namespace dcmcore

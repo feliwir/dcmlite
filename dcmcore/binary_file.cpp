@@ -1,6 +1,6 @@
-#include "dcmlite/binary_file.h"
+#include "dcmcore/binary_file.h"
 
-namespace dcmlite {
+namespace dcmcore {
 
 BinaryFile::BinaryFile()
     : m_mode(Mode::READ)
@@ -27,4 +27,4 @@ void BinaryFile::Close()
   m_file.close();
 }
 
-} // namespace dcmlite
+} // namespace dcmcore

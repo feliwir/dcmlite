@@ -1,11 +1,11 @@
-#include "dcmlite/data_element.h"
+#include "dcmcore/data_element.h"
 
 #include <iostream>
 #include <sstream>
 
-#include "dcmlite/visitor.h"
+#include "dcmcore/visitor.h"
 
-namespace dcmlite {
+namespace dcmcore {
 
 // NOTE:
 // In order to be consistent with the initial state of buffer, length_ is
@@ -14,80 +14,24 @@ DataElement::DataElement(Tag tag, VR::Type vr_type, Endian endian)
     : tag_(tag)
     , vr_type_(vr_type)
     , endian_(endian)
-    , length_(0)
 {
 }
 
-void DataElement::SetBuffer(Buffer buffer, std::size_t length)
+void DataElement::SetBuffer(Buffer buffer)
 {
   buffer_ = buffer;
-  length_ = length;
 }
 
 // TODO: Check VR.
 bool DataElement::GetString(std::string& value) const
 {
-  if (buffer_ && length_ > 0) {
-    if (buffer_[length_ - 1] == ' ') {
+  if (!buffer_.empty()) {
+    if (buffer_.back() == ' ') {
       // Remove the padding space.
-      value.assign(buffer_.get(), length_ - 1);
+      value.assign(buffer_.data(), buffer_.size() - 1);
     } else {
-      value.assign(buffer_.get(), length_);
+      value.assign(buffer_.data(), buffer_.size());
     }
-    return true;
-  }
-  return false;
-}
-
-bool DataElement::GetUint16(std::uint16_t& value) const
-{
-  if (GetNumber<std::uint16_t>(value)) {
-    AdjustBytes16(&value);
-    return true;
-  }
-  return false;
-}
-
-bool DataElement::GetUint32(std::uint32_t& value) const
-{
-  if (GetNumber<std::uint32_t>(value)) {
-    AdjustBytes32(&value);
-    return true;
-  }
-  return false;
-}
-
-bool DataElement::GetInt16(std::int16_t& value) const
-{
-  if (GetNumber<std::int16_t>(value)) {
-    AdjustBytes16(&value);
-    return true;
-  }
-  return false;
-}
-
-bool DataElement::GetInt32(std::int32_t& value) const
-{
-  if (GetNumber<std::int32_t>(value)) {
-    AdjustBytes32(&value);
-    return true;
-  }
-  return false;
-}
-
-bool DataElement::GetFloat32(float32_t& value) const
-{
-  if (GetNumber<float32_t>(value, 4)) {
-    AdjustBytes32(&value);
-    return true;
-  }
-  return false;
-}
-
-bool DataElement::GetFloat64(float64_t& value) const
-{
-  if (GetNumber<float64_t>(value, 8)) {
-    AdjustBytes64(&value);
     return true;
   }
   return false;
@@ -135,42 +79,42 @@ void DataElement::PrintValue(std::ostream& os) const
   case VR::US: // Unsigned Short
   {
     std::uint16_t value = 0;
-    GetUint16(value);
+    Get<uint16_t>(value);
     os << value;
   } break;
 
   case VR::SS: // Signed Short
   {
     std::int16_t value = 0;
-    GetInt16(value);
+    Get<int16_t>(value);
     os << value;
   } break;
 
   case VR::UL: // Unsigned Long
   {
     std::uint32_t value = 0;
-    GetUint32(value);
+    Get<uint32_t>(value);
     os << value;
   } break;
 
   case VR::SL: // Signed Long
   {
     std::int32_t value = 0;
-    GetInt32(value);
+    Get<int32_t>(value);
     os << value;
   } break;
 
   case VR::FL: // Floating Point Single
   {
     float32_t value = 0.0;
-    GetFloat32(value);
+    Get<float32_t>(value);
     os << value;
   } break;
 
   case VR::FD: // Floating Point Double
   {
     float64_t value = 0.0;
-    GetFloat64(value);
+    Get<float64_t>(value);
     os << value;
   } break;
 
@@ -184,27 +128,6 @@ void DataElement::PrintValue(std::string& str) const
   std::stringstream ss;
   PrintValue(ss);
   str = ss.str();
-}
-
-void DataElement::AdjustBytes16(void* value) const
-{
-  if (endian_ != PlatformEndian()) {
-    Swap16(&value);
-  }
-}
-
-void DataElement::AdjustBytes32(void* value) const
-{
-  if (endian_ != PlatformEndian()) {
-    Swap32(&value);
-  }
-}
-
-void DataElement::AdjustBytes64(void* value) const
-{
-  if (endian_ != PlatformEndian()) {
-    Swap64(&value);
-  }
 }
 
 std::ostream& operator<<(std::ostream& os, const DataElement& element)
@@ -229,4 +152,4 @@ std::ostream& operator<<(std::ostream& os, const DataElement& element)
   return os;
 }
 
-} // namespace dcmlite
+} // namespace dcmcore

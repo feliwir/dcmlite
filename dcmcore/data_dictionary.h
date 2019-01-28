@@ -2,10 +2,10 @@
 
 // Data dictionary singleton.
 
-#include "dcmlite/data_entry.h"
-#include "dcmlite/tag.h"
+#include "dcmcore/data_entry.h"
+#include "dcmcore/tag.h"
 
-namespace dcmlite {
+namespace dcmcore {
 
 class DataDictionary {
   public:
@@ -19,4 +19,4 @@ class DataDictionary {
   DataDictionary() = default;
 };
 
-} // namespace dcmlite
+} // namespace dcmcore

@@ -2,10 +2,10 @@
 
 #include <vector>
 
-#include "dcmlite/defs.h"
-#include "dcmlite/tag.h"
+#include "dcmcore/defs.h"
+#include "dcmcore/tag.h"
 
-namespace dcmlite {
+namespace dcmcore {
 
 class DataElement;
 class DataSet;
@@ -128,4 +128,4 @@ class TagsReadHandler : public ReadHandler {
   std::vector<DataSet*> data_set_stack_;
 };
 
-} // namespace dcmlite
+} // namespace dcmcore

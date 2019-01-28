@@ -1,11 +1,11 @@
 #pragma once
 
-#include "dcmlite/vr.h"
+#include "dcmcore/vr.h"
 #include <chrono>
 
 // Misc utilities.
 
-namespace dcmlite {
+namespace dcmcore {
 
 // For VRs of OB, OD, OF, OL, OW, SQ, UN and UC, UR, UT, the 16 bits
 // following the two character VR Field are reserved for use by later
@@ -27,4 +27,4 @@ class TimeIt {
   std::chrono::system_clock::time_point start_;
 };
 
-} // namespace dcmlite
+} // namespace dcmcore

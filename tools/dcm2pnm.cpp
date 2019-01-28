@@ -5,15 +5,13 @@
 
 #include "cxxopts.hpp"
 #include "dcmimg/img_data.h"
-#include "dcmlite/dcmlite.h"
-
-const dcmlite::Tag kPixelData(0x7FE0, 0x0010 );
+#include "dcmcore/dcmcore.h"
 
 int main(int argc, char* argv[])
 {
   cxxopts::Options options("dcm2pnm", 
   "Save the pixeldata of the DICOM file as an image file");
-  
+
   options
       .positional_help("[optional args]")
       .show_positional_help();
@@ -37,14 +35,13 @@ int main(int argc, char* argv[])
   std::cout << "Filepath: " << file_path << std::endl;
   std::cout << std::endl;
 
-  dcmlite::DataSet data_set;
-  dcmlite::TagsReadHandler read_handler(&data_set);
-  read_handler.AddTag(kPixelData);
+  dcmcore::DataSet data_set;
+  dcmcore::FullReadHandler read_handler(&data_set);
 
-  dcmlite::DicomReader reader(&read_handler);
+  dcmcore::DicomReader reader(&read_handler);
   reader.ReadFile(file_path);
 
-  dcmlite::img::ImageData img_data;
+  dcmcore::img::ImageData img_data;
   img_data.LoadFromDataSet(data_set);
 
   return 0;

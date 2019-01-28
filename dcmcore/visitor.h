@@ -2,7 +2,7 @@
 
 #include <iosfwd>
 
-namespace dcmlite {
+namespace dcmcore {
 
 class BinaryFile;
 class DataElement;
@@ -68,4 +68,4 @@ class WriteVisitor : public Visitor {
   BinaryFile* file_;
 };
 
-} // namespace dcmlite
+} // namespace dcmcore

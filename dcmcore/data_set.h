@@ -4,10 +4,10 @@
 #include <string>
 #include <vector>
 
-#include "dcmlite/data_element.h"
-#include "dcmlite/defs.h"
+#include "dcmcore/data_element.h"
+#include "dcmcore/defs.h"
 
-namespace dcmlite {
+namespace dcmcore {
 
 class Visitor;
 
@@ -71,14 +71,14 @@ class DataSet : public DataElement {
 
   bool GetString(Tag tag, std::string& value) const;
 
-  bool GetUint16(Tag tag, std::uint16_t& value) const;
-  bool GetUint32(Tag tag, std::uint32_t& value) const;
-
-  bool GetInt16(Tag tag, std::int16_t& value) const;
-  bool GetInt32(Tag tag, std::int32_t& value) const;
-
-  bool GetFloat32(Tag tag, float32_t& value) const;
-  bool GetFloat64(Tag tag, float64_t& value) const;
+  template<class T>
+  inline bool Get(Tag tag, T& value) const
+  {
+    const DataElement* element = GetElement(tag);
+    if (element != nullptr) { 
+      return element->Get<T>(value);
+    }     
+  }
 
   private:
   bool explicit_vr_;
@@ -87,4 +87,4 @@ class DataSet : public DataElement {
   std::vector<DataElement*> m_elements;
 };
 
-} // namespace dcmlite
+} // namespace dcmcore

@@ -11,7 +11,7 @@ cc_test(
     ],
     linkopts = ["-lstdc++fs"],
     deps = [
-        "//dcmlite",
+        "//dcmcore",
         "@gtest//:main",
     ],
 )

@@ -5,15 +5,21 @@
 #include <string>
 #include <string_view>
 
-#include "dcmlite/data_set.h"
+#include "dcmcore/data_set.h"
 
-namespace dcmlite::img {
+namespace dcmcore::img {
 
 class ImageData final {
   public:
   ImageData();
 
   bool LoadFromDataSet(const DataSet& dataset);
+
+  private:
+  bool LoadJpegLs(const Buffer& buffer);
+
+  uint16_t m_columns;
+  uint16_t m_rows;
 };
 
 }

@@ -1,4 +1,4 @@
-# https://docs.bazel.build/versions/master/be/c-cpp.html#cc_library
+#https: //docs.bazel.build/versions/master/be/c-cpp.html#cc_library
 cc_library(
     name = "dcmimg",
     srcs = glob(["*.cpp"]),
@@ -9,7 +9,7 @@ cc_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
-        "//dcmlite",
+        "//dcmcore",
         "@charls//:main",
     ],
 )

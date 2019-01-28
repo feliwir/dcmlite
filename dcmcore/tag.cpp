@@ -1,9 +1,9 @@
-#include "dcmlite/tag.h"
+#include "dcmcore/tag.h"
 
 #include <iomanip>
 #include <istream>
 
-namespace dcmlite {
+namespace dcmcore {
 
 const Tag kSeqEndTag(0xFFFE, 0xE0DD);
 const Tag kSeqItemEndTag(0xFFFE, 0xE00D);
@@ -26,4 +26,4 @@ std::ostream& operator<<(std::ostream& os, Tag tag)
   return os;
 }
 
-} // namespace dcmlite
+} // namespace dcmcore

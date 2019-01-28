@@ -3,13 +3,14 @@
 #include <cstdint>
 #include <iosfwd>
 #include <memory>
+#include <vector>
 
-#include "dcmlite/tag.h"
-#include "dcmlite/vr.h"
+#include "dcmcore/tag.h"
+#include "dcmcore/vr.h"
 
-namespace dcmlite {
+namespace dcmcore {
 
-typedef std::shared_ptr<char[]> Buffer;
+using Buffer = std::vector<char>;
 
 class Visitor;
 
@@ -35,13 +36,13 @@ class DataElement {
   // Get the value length.
   std::size_t length() const
   {
-    return length_;
+    return buffer_.size();
   }
 
   // NOTE: SetBuffer will also set length.
   void set_length(std::size_t length)
   {
-    length_ = length;
+    //buffer_.resize(length);
   }
 
   // Get the value buffer.
@@ -54,22 +55,20 @@ class DataElement {
   // Set value buffer and length together.
   // The length must be even (2, 4, 8, etc.).
   // Always set buffer and length together to ensure data consistency.
-  void SetBuffer(Buffer buffer, std::size_t length);
+  void SetBuffer(Buffer buffer);
 
   // TODO: Add applicable VR types as comments.
   bool GetString(std::string& value) const;
 
-  bool GetUint16(std::uint16_t& value) const;
-
-  bool GetUint32(std::uint32_t& value) const;
-
-  bool GetInt16(std::int16_t& value) const;
-
-  bool GetInt32(std::int32_t& value) const;
-
-  bool GetFloat32(float32_t& value) const;
-
-  bool GetFloat64(float64_t& value) const;
+  template <class T>
+  inline bool Get(T& value) const
+  {
+    if (GetNumber<T>(value)) {
+      AdjustBytes<T>(&value);
+      return true;
+    }
+    return false;
+  }
 
   // Print value to an output stream.
   void PrintValue(std::ostream& os) const;
@@ -85,23 +84,20 @@ class DataElement {
   template <typename T>
   bool GetNumber(T& value) const
   {
-    return GetNumber<T>(value, sizeof(T));
-  }
-
-  // Get number value.
-  template <typename T>
-  bool GetNumber(T& value, std::size_t length) const
-  {
-    if (buffer_ && length_ == length) {
-      value = *reinterpret_cast<T*>(buffer_.get());
+    if (!buffer_.empty() && buffer_.size() == sizeof(T)) {
+      value = *reinterpret_cast<const T*>(buffer_.data());
       return true;
     }
     return false;
   }
 
-  void AdjustBytes16(void* value) const;
-  void AdjustBytes32(void* value) const;
-  void AdjustBytes64(void* value) const;
+  template<class T>
+  inline void AdjustBytes(void* value) const
+  {
+    if (endian_ != PlatformEndian()) {
+      byteswap<T>(&value);
+    }
+  }
 
   protected:
   Tag tag_;
@@ -110,14 +106,10 @@ class DataElement {
   // Big endian or little endian.
   Endian endian_;
 
-  // Value length.
-  // Undefined length for SQ element is 0xFFFFFFFF.
-  std::size_t length_;
-
   // Value buffer.
   Buffer buffer_;
 };
 
 std::ostream& operator<<(std::ostream& os, const DataElement& element);
 
-} // namespace dcmlite
+} // namespace dcmcore

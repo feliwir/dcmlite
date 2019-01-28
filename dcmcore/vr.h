@@ -3,9 +3,9 @@
 // Value Representation.
 // See PS 3.5 Section 6.2 - Value Representation (VR).
 
-#include "dcmlite/defs.h"
+#include "dcmcore/defs.h"
 
-namespace dcmlite {
+namespace dcmcore {
 
 #define MAKE_VR_ENUM(c0, c1) ((((int)c0) << 8) | (int)c1)
 
@@ -66,4 +66,4 @@ class VR {
   std::uint32_t max_data_length;
 };
 
-} // namespace dcmlite
+} // namespace dcmcore

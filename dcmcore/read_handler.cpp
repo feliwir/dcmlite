@@ -1,13 +1,13 @@
-#include "dcmlite/read_handler.h"
+#include "dcmcore/read_handler.h"
 
 #include <algorithm>
 #include <cassert>
 #include <iostream>
 
-#include "dcmlite/data_element.h"
-#include "dcmlite/data_set.h"
+#include "dcmcore/data_element.h"
+#include "dcmcore/data_set.h"
 
-namespace dcmlite {
+namespace dcmcore {
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -174,4 +174,4 @@ void TagsReadHandler::ClearTags()
   tags_.clear();
 }
 
-} // namespace dcmlite
+} // namespace dcmcore

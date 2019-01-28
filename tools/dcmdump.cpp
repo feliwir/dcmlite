@@ -4,12 +4,12 @@
 #include <string_view>
 
 #include "cxxopts.hpp"
-#include "dcmlite/dcmlite.h"
+#include "dcmcore/dcmcore.h"
 
 void DumpDicomFile(std::string_view file_path)
 {
-  dcmlite::DumpReadHandler read_handler;
-  dcmlite::DicomReader reader(&read_handler);
+  dcmcore::DumpReadHandler read_handler;
+  dcmcore::DicomReader reader(&read_handler);
   reader.ReadFile(file_path);
 
   std::cout << std::endl;

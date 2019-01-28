@@ -8,9 +8,9 @@
 #include <cstdint>
 #include <iosfwd>
 
-#include "dcmlite/defs.h"
+#include "dcmcore/defs.h"
 
-namespace dcmlite {
+namespace dcmcore {
 
 class Tag;
 
@@ -27,49 +27,51 @@ class Tag {
   Tag(const Tag& rhs) = default;
   Tag& operator=(const Tag& rhs) = default;
 
-  Tag(std::uint16_t group, std::uint16_t element)
+  constexpr Tag(const std::uint16_t group, const std::uint16_t element)
       : group_(group)
       , element_(element)
   {
   }
 
-  Tag(std::uint32_t tag_key)
+  constexpr Tag(const std::uint32_t tag_key)
       : group_((tag_key >> 16) & 0xFFFF)
       , element_(tag_key & 0xFFFF)
   {
   }
 
-  std::uint16_t group() const
+  inline std::uint16_t group() const
   {
     return group_;
   }
-  void set_group(std::uint16_t group)
+
+  inline void set_group(std::uint16_t group)
   {
     group_ = group;
   }
 
-  std::uint16_t element() const
+  inline std::uint16_t element() const
   {
     return element_;
   }
-  void set_element(std::uint16_t element)
+
+  inline void set_element(std::uint16_t element)
   {
     element_ = element;
   }
 
-  bool IsEmpty() const
+  inline bool IsEmpty() const
   {
     return group_ == 0 && element_ == 0;
   }
 
-  Tag SwapBytes() const
+  inline Tag SwapBytes() const
   {
-    return Tag(SwapUint16(group_), SwapUint16(element_));
+    return Tag(byteswap<uint16_t>(group_), byteswap<uint16_t>(element_));
   }
 
   // Convert to a 4-byte unsigned integer.
   // Group in high two bytes, element in low two bytes.
-  std::uint32_t ToUint32() const
+  inline std::uint32_t ToUint32() const
   {
     return (group_ << 16) + element_;
   }
@@ -111,4 +113,4 @@ inline bool operator>=(Tag lhs, Tag rhs)
 
 std::ostream& operator<<(std::ostream& os, Tag tag);
 
-} // namespace dcmlite
+} // namespace dcmcore

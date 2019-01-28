@@ -2,10 +2,10 @@
 
 // Data dictionary entry.
 
-#include "dcmlite/defs.h"
-#include "dcmlite/vr.h"
+#include "dcmcore/defs.h"
+#include "dcmcore/vr.h"
 
-namespace dcmlite {
+namespace dcmcore {
 
 class DataEntry {
   public:
@@ -15,4 +15,4 @@ class DataEntry {
   std::string description;
 };
 
-} // namespace dcmlite
+} // namespace dcmcore

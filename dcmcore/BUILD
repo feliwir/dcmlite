@@ -1,6 +1,6 @@
 # https://docs.bazel.build/versions/master/be/c-cpp.html#cc_library
 cc_library(
-    name = "dcmlite",
+    name = "dcmcore",
     srcs = glob(["*.cpp"]),
     hdrs = glob(["*.h"]),
     copts = ["-std=c++17"],

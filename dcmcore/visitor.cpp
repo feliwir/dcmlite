@@ -1,14 +1,14 @@
-#include "dcmlite/visitor.h"
+#include "dcmcore/visitor.h"
 
 #include <fstream>
 #include <iostream>
 
-#include "dcmlite/binary_file.h"
-#include "dcmlite/data_element.h"
-#include "dcmlite/data_set.h"
-#include "dcmlite/util.h"
+#include "dcmcore/binary_file.h"
+#include "dcmcore/data_element.h"
+#include "dcmcore/data_set.h"
+#include "dcmcore/util.h"
 
-namespace dcmlite {
+namespace dcmcore {
 
 PrintVisitor::PrintVisitor(std::ostream& os)
     : os_(os)
@@ -88,7 +88,7 @@ void WriteVisitor::VisitDataElement(DataElement* data_element)
   if (vr_type != VR::SQ) { // SQ is handled in VisitDataSet().
     if (length > 0) {
       // TODO: Convert endian for numbers if necessary.
-      file_->WriteBytes(data_element->buffer().get(), length);
+      file_->WriteBytes(data_element->buffer().data(), length);
     }
   }
 }
@@ -127,4 +127,4 @@ void WriteVisitor::VisitDataSet(DataSet* data_set)
   --level_;
 }
 
-} // namespace dcmlite
+} // namespace dcmcore

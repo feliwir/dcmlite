@@ -1,9 +1,9 @@
-#include "dcmlite/vr.h"
+#include "dcmcore/vr.h"
 
 #include <map>
 #include <memory> // for unique_ptr
 
-namespace dcmlite {
+namespace dcmcore {
 
 // VR dictionary.
 // A singleton to cache all valid VRs.
@@ -100,4 +100,4 @@ bool VR::FromString(const std::string& vr_str, VR::Type* vr_type)
   return true;
 }
 
-} // namespace dcmlite
+} // namespace dcmcore

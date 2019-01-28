@@ -4,9 +4,9 @@
 #include <string_view>
 #include <vector>
 
-#include "dcmlite/defs.h"
+#include "dcmcore/defs.h"
 
-namespace dcmlite {
+namespace dcmcore {
 
 class DataElement;
 class DataSet;
@@ -48,4 +48,4 @@ class DicomReader {
   bool explicit_vr_; // Explicit or implicit VR.
 };
 
-} // namespace dcmlite
+} // namespace dcmcore
