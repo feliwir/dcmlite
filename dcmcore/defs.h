@@ -49,7 +49,7 @@ inline int32_t byteswap<int32_t >(int32_t value)
 template<>
 inline uint64_t byteswap<uint64_t >(uint64_t value)
 {
-    return std::uint64_t (byteswap<uint32_t >(value) << 32LL) | 
+    return std::uint64_t ((unsigned long long)byteswap<uint32_t >(value) << 32LL) | 
                           byteswap<uint32_t >(value >> 32LL);
 }
 

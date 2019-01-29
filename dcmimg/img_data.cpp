@@ -17,12 +17,12 @@ dcmcore::img::ImageData::ImageData()
 
 bool dcmcore::img::ImageData::LoadFromDataSet(const DataSet& dataset)
 {
-  if (!dataset.GetUint16(kColumns, m_columns)) {
+  if (!dataset.Get<uint16_t>(kColumns, m_columns)) {
     std::cout << "No width specified" << std::endl;
     return false;
   }
 
-  if (!dataset.GetUint16(kRows, m_rows)) {
+  if (!dataset.Get<uint16_t>(kRows, m_rows)) {
     std::cout << "No height specified" << std::endl;
     return false;
   }
@@ -67,4 +67,6 @@ bool dcmcore::img::ImageData::LoadJpegLs(const dcmcore::Buffer& buffer)
 
   auto width = params.width;
   auto height = params.height;
+
+  return true;
 }

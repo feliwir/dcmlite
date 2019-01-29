@@ -77,7 +77,9 @@ class DataSet : public DataElement {
     const DataElement* element = GetElement(tag);
     if (element != nullptr) { 
       return element->Get<T>(value);
-    }     
+    }
+
+    return false;
   }
 
   private:
