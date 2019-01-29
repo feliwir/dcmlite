@@ -39,7 +39,7 @@ install:
     fi
 
 script:
-  - bazel test ...
+  - bazel build ...
 
 notifications:
   email: false
