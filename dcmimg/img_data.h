@@ -6,6 +6,7 @@
 #include <string_view>
 
 #include "dcmcore/data_set.h"
+#include "image.h"
 
 namespace dcmcore::img {
 
@@ -15,11 +16,18 @@ class ImageData final {
 
   bool LoadFromDataSet(const DataSet& dataset);
 
-  private:
-  bool LoadJpegLs(const Buffer& buffer);
+  inline const IImage* GetImage()
+  {
+    return m_image.get();
+  }
 
-  uint16_t m_columns;
-  uint16_t m_rows;
+  private:
+  bool CreateImage(const DataSet& dataset);
+
+  bool LoadJpegLs(const Buffer& buffer);
+  bool LoadUncompressedLE(const Buffer& buffer);
+
+  std::unique_ptr<IImage> m_image;
 };
 
 }

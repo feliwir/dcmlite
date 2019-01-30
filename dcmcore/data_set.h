@@ -71,11 +71,11 @@ class DataSet : public DataElement {
 
   bool GetString(Tag tag, std::string& value) const;
 
-  template<class T>
+  template <class T>
   inline bool Get(Tag tag, T& value) const
   {
     const DataElement* element = GetElement(tag);
-    if (element != nullptr) { 
+    if (element != nullptr) {
       return element->Get<T>(value);
     }
 

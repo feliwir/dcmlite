@@ -5,12 +5,11 @@
 #include <memory>
 #include <vector>
 
+#include "dcmcore/buffer.h"
 #include "dcmcore/tag.h"
 #include "dcmcore/vr.h"
 
 namespace dcmcore {
-
-using Buffer = std::vector<char>;
 
 class Visitor;
 
@@ -91,7 +90,7 @@ class DataElement {
     return false;
   }
 
-  template<class T>
+  template <class T>
   inline void AdjustBytes(void* value) const
   {
     if (endian_ != PlatformEndian()) {

@@ -8,6 +8,10 @@
 constexpr dcmcore::Tag kRows(0x0028, 0x0010);
 constexpr dcmcore::Tag kColumns(0x0028, 0x0011);
 
+// Bits per pixel
+constexpr dcmcore::Tag kBitsAllocated(0x0028, 0x0100);
+constexpr dcmcore::Tag kBitsStored(0x0028, 0x0101);
+
 // Pixeldata
 constexpr dcmcore::Tag kPixelData(0x7FE0, 0x0010);
 
@@ -15,15 +19,48 @@ dcmcore::img::ImageData::ImageData()
 {
 }
 
-bool dcmcore::img::ImageData::LoadFromDataSet(const DataSet& dataset)
+bool dcmcore::img::ImageData::CreateImage(const DataSet& dataset)
 {
-  if (!dataset.Get<uint16_t>(kColumns, m_columns)) {
+  uint16_t columns, rows, abpp, bpp;
+
+  if (!dataset.Get<uint16_t>(kColumns, columns)) {
     std::cout << "No width specified" << std::endl;
     return false;
   }
 
-  if (!dataset.Get<uint16_t>(kRows, m_rows)) {
+  if (!dataset.Get<uint16_t>(kRows, rows)) {
     std::cout << "No height specified" << std::endl;
+    return false;
+  }
+
+  if (!dataset.Get<uint16_t>(kBitsAllocated, abpp)) {
+    std::cout << "No allocated bits per pixel specified" << std::endl;
+    return false;
+  }
+
+  if (!dataset.Get<uint16_t>(kBitsStored, bpp)) {
+    std::cout << "No stored bits per pixel specified" << std::endl;
+    return false;
+  }
+
+  switch (abpp) {
+  case 8:
+    m_image = std::make_unique<Image<uint8_t>>(columns, rows, bpp);
+    break;
+  case 16:
+    m_image = std::make_unique<Image<uint16_t>>(columns, rows, bpp);
+    break;
+  default:
+    break;
+  }
+
+  return true;
+}
+
+bool dcmcore::img::ImageData::LoadFromDataSet(const DataSet& dataset)
+{
+  if (!CreateImage(dataset)) {
+    std::cout << "Missing required image tags" << std::endl;
     return false;
   }
 
@@ -40,19 +77,19 @@ bool dcmcore::img::ImageData::LoadFromDataSet(const DataSet& dataset)
     return false;
   }
 
-  switch (syntax)
-  {
-    case TransferSyntax::EXPLICIT_VR_LE:
-      /* code */
-      break;
+  switch (syntax) {
+  case TransferSyntax::EXPLICIT_VR_LE:
+    return LoadUncompressedLE(buffer);
 
-    case TransferSyntax::EXPLICIT_VR_BE:
-      break;
-  
-    default:
-      // Not implemented yet
-      break;
+  case TransferSyntax::EXPLICIT_VR_BE:
+    break;
+
+  default:
+    // Not implemented yet
+    break;
   }
+
+  return false;
 }
 
 bool dcmcore::img::ImageData::LoadJpegLs(const dcmcore::Buffer& buffer)
@@ -65,8 +102,16 @@ bool dcmcore::img::ImageData::LoadJpegLs(const dcmcore::Buffer& buffer)
     return false;
   }
 
-  auto width = params.width;
-  auto height = params.height;
+  return true;
+}
 
+bool dcmcore::img::ImageData::LoadUncompressedLE(const Buffer& buffer)
+{
+  if (m_image->GetTotalSize() != buffer.size()) {
+    std::cout << "Image data size doesn't match expected size" << std::endl;
+    return false;
+  }
+
+  m_image->SetBuffer(buffer);
   return true;
 }

@@ -86,7 +86,7 @@ bool DataSet::GetBuffer(Tag tag,
 bool DataSet::GetString(Tag tag, std::string& value) const
 {
   const DataElement* element = GetElement(tag);
-  if (element != nullptr) { 
+  if (element != nullptr) {
     return element->GetString(value);
   }
 

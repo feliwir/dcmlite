@@ -23,5 +23,6 @@ cc_binary(
         "//dcmcore",
         "//dcmimg",
         "@cxxopts//:main",
+        "@pnm//:main",
     ],
 )

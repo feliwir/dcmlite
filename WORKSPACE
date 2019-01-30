@@ -23,3 +23,10 @@ http_archive(
     build_file = "@dcmlite//third_party:charls.BUILD",
     strip_prefix = "charls-master",
 )
+
+http_archive(
+    name = "pnm",
+    url = "https://github.com/ToruNiina/pnm/archive/master.zip",
+    build_file = "@dcmlite//third_party:pnm.BUILD",
+    strip_prefix = "pnm-master",
+)

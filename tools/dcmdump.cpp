@@ -22,11 +22,7 @@ int main(int argc, char* argv[])
       .positional_help("[optional args]")
       .show_positional_help();
 
-  options.add_options("General")
-  ("d,debug", "Enable debug mode")
-  ("h,help", "Print help")
-  ("i,input", "Input file to dump", cxxopts::value<std::string>())
-  ("positional", "Positional arguments", cxxopts::value<std::vector<std::string>>());
+  options.add_options("General")("d,debug", "Enable debug mode")("h,help", "Print help")("i,input", "Input file to dump", cxxopts::value<std::string>())("positional", "Positional arguments", cxxopts::value<std::vector<std::string>>());
 
   options.parse_positional({ "input", "positional" });
 
@@ -38,8 +34,6 @@ int main(int argc, char* argv[])
   }
 
   auto file_path = result["input"].as<std::string>();
-  std::cout << "Filepath: " << file_path << std::endl;
-  std::cout << std::endl;
 
   DumpDicomFile(file_path);
 
